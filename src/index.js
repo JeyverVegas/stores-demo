@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import "react-toastify/dist/ReactToastify.css";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { FeedBackProvider } from './context/FeedBackContext';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <ThemeProvider theme={createTheme()}>
+        <AuthProvider>
+          <FeedBackProvider>
+            <App />
+          </FeedBackProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
