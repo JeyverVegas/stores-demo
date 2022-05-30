@@ -205,7 +205,7 @@ const StoresUpdate = () => {
                                 Cancelar
                             </Button>
                             <Button disabled={updateLoading} type="submit" variant="contained" style={{ margin: '0 5px' }}>
-                                Crear
+                                Actualizar
                             </Button>
                         </Box>
                     </form>
