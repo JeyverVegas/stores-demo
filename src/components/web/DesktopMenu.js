@@ -78,15 +78,6 @@ const DesktopMenu = () => {
             >
                 {SystemInfo.name}
             </Typography>
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                />
-            </Search>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'end' }}>
                 <Button href="/iniciar-sesion" sx={{ my: 2, color: 'white', display: 'block' }}>
                     Iniciar Sesión
