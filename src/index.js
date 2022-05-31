@@ -12,7 +12,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={createTheme()}>
+      <ThemeProvider theme={createTheme({
+        palette: {
+          neutral: {
+            main: '#FFFFFF',
+            contrastText: '#fff',
+            darker: '#fff',
+          },
+        }
+      })}>
         <AuthProvider>
           <FeedBackProvider>
             <App />

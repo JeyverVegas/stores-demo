@@ -1,69 +1,68 @@
-import { Box, Button, Typography } from "@mui/material";
-import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
-import SystemInfo from "../../util/SystemInfo";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, Typography, Popper } from "@mui/material";
+import { styled, alpha } from '@mui/material/styles';
 
+import SystemInfo from "../../util/SystemInfo";
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import useStores from "../../hooks/useStores";
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
-    [theme.breakpoints.down('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: '60%',
-    },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '24ch',
-            '&:focus': {
-                width: '30ch',
-            },
+const StyledAutocomplete = styled(Autocomplete)({
+    "& .MuiAutocomplete-inputRoot": {
+        color: "white",
+        // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
+        '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
+            // Default left padding is 6px
+            paddingLeft: 26
         },
-        [theme.breakpoints.down('md')]: {
-            width: '8ch',
-            '&:focus': {
-                width: '8ch',
-            },
+        "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
         },
-    },
-}));
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+        },
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+        }
+    }
+});
+
 
 const DesktopMenu = () => {
 
     const navigate = useNavigate();
 
+    const [open, setOpen] = useState(false);
+
+    const [storesFilters, setStoresFilters] = useState({ name: '' });
+
+    const [{ stores, loading }, getStores] = useStores({ axiosConfig: { params: { ...storesFilters } }, options: { useCache: false } });
+
+    const [selectedStore, setSelectedStore] = useState(null);
+
+    useEffect(() => {
+        if (selectedStore) {
+            navigate?.(`/tiendas/${selectedStore?.name}?id=${selectedStore?.id}`)
+        }
+    }, [selectedStore])
+
     const handleClick = () => {
         navigate?.('/')
+    }
+
+    const handleChange = (e) => {
+        setStoresFilters((oldFilters) => {
+            return {
+                ...oldFilters,
+                [e.target.name]: e?.target.value
+            }
+        });
+    }
+
+    const handleStore = (e, store) => {
+        setSelectedStore(store);
     }
 
     return (
@@ -78,6 +77,41 @@ const DesktopMenu = () => {
             >
                 {SystemInfo.name}
             </Typography>
+            <StyledAutocomplete
+                sx={{ width: 300 }}
+                open={open}
+                onOpen={() => {
+                    setOpen(true);
+                }}
+                onClose={() => {
+                    setOpen(false);
+                }}
+                onChange={handleStore}
+                isOptionEqualToValue={(option, value) => option?.id === value?.id}
+                getOptionLabel={(store) => store?.name}
+                options={stores}
+                loading={loading}
+                color="neutral"
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Buscar Tiendas..."
+                        name="name"
+                        color="neutral"
+                        value={selectedStore}
+                        onChange={handleChange}
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                                <>
+                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {params.InputProps.endAdornment}
+                                </>
+                            ),
+                        }}
+                    />
+                )}
+            />
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'end' }}>
                 <Button href="/iniciar-sesion" sx={{ my: 2, color: 'white', display: 'block' }}>
                     Iniciar Sesión
