@@ -21,7 +21,7 @@ const StoresUpdate = () => {
     const [data, setData] = useState({
         name: '',
         address: '',
-        phone_number: '',
+        phoneNumber: '',
         email: '',
         latitude: '',
         longitude: '',
@@ -39,9 +39,9 @@ const StoresUpdate = () => {
 
     useEffect(() => {
         if (getData) {
-            const { image_path, created_at, id, location, store_reviews, updated_at, ...rest } = getData;
+            const { imagePath, created_at, id, location, storeReviews, updated_at, ...rest } = getData?.data;
 
-            setImagePreview(`${process.env.REACT_APP_API_HOST}${image_path}`);
+            setImagePreview(`${process.env.REACT_APP_API_HOST}${imagePath}`);
             setData((oldData) => {
                 return {
                     ...oldData,
@@ -168,8 +168,8 @@ const StoresUpdate = () => {
                                         </div>
                                     }
                                     variant="outlined"
-                                    name="phone_number"
-                                    value={data?.phone_number}
+                                    name="phoneNumber"
+                                    value={data?.phoneNumber}
                                     onChange={handleChange}
                                 />
                             </Grid>

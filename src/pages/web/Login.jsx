@@ -14,12 +14,22 @@ import { useEffect, useState } from 'react';
 import useAxios from '../../hooks/useAxios';
 import { useFeedBack } from '../../context/FeedBackContext';
 import { useAuth } from '../../context/AuthContext';
+import { useSearchParams } from 'react-router-dom';
+import { Alert, AlertTitle } from '@mui/material';
 
 const Login = () => {
+
+    const [searchParams] = useSearchParams();
 
     const { setAuthInfo } = useAuth();
 
     const { setLoading } = useFeedBack();
+
+    const [alert, setAlert] = useState({
+        message: '',
+        show: false,
+        severity: ''
+    });
 
     const [loginData, setLoginData] = useState({
         email: '',
@@ -27,6 +37,19 @@ const Login = () => {
     });
 
     const [{ data: dataLogin, loading: loadingLogin }, login] = useAxios({ url: `/auth/login`, method: 'POST' }, { manual: true, useCache: false });
+
+    useEffect(() => {
+        const alertMessage = searchParams?.get('message');
+        const alertSeverity = searchParams?.get('severity');
+        if (alertMessage && alertSeverity) {
+            setAlert({
+                message: alertMessage,
+                show: true,
+                severity: alertSeverity
+            });
+        }
+
+    }, [searchParams]);
 
     useEffect(() => {
         if (dataLogin) {
@@ -62,6 +85,17 @@ const Login = () => {
             <IconButton href='/' color="primary">
                 <ArrowBackIcon />
             </IconButton>
+            <Container>
+                {
+                    alert?.show ?
+                        <Alert severity={alert?.severity} onClose={() => setAlert({ show: false, message: '', severity: '' })}>
+                            <AlertTitle style={{ textTransform: 'capitalize' }}>{alert?.severity}.</AlertTitle>
+                            {alert?.message}.
+                        </Alert>
+                        :
+                        null
+                }
+            </Container>
             <Container component="main" maxWidth="xs">
                 <Box
                     sx={{

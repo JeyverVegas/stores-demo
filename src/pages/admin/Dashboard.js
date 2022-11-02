@@ -10,8 +10,8 @@ import useAxios from "../../hooks/useAxios";
 
 const Dashboard = () => {
 
-    const [{ total: usersTotal, loading: loadingUsers }, getUsers] = useUsers({ options: { useCache: false } });
-    const [{ total: storesTotal, loading: loadingStores }, getStores] = useStores({ options: { useCache: false } });
+    const [{ data: usersCount, loading: usersCountsLoading }, getUsersCount] = useAxios({ url: `/users/count` }, { useCache: false });
+    const [{ data: storesCount, loading: storesCountsLoading }, getStoresCount] = useAxios({ url: `/stores/count` }, { useCache: false });
     const [{ data: commentsCount, loading: commentsCountsLoading }, getCommentsCount] = useAxios({ url: `/store-reviews/count` }, { useCache: false });
 
     useEffect(() => {
@@ -28,8 +28,8 @@ const Dashboard = () => {
                         icon={<AddBusinessIcon />}
                         title={'Tiendas registradas'}
                         color="success"
-                        value={storesTotal}
-                        loading={loadingStores}
+                        value={storesCount}
+                        loading={storesCountsLoading}
                     />
                 </Grid>
                 <Grid item xs={4} md={4}>
@@ -37,7 +37,7 @@ const Dashboard = () => {
                         icon={<ChatIcon />}
                         title={'Comentarios'}
                         color="warning"
-                        value={commentsCount?.count}
+                        value={commentsCount}
                         loading={commentsCountsLoading}
                     />
                 </Grid>
@@ -46,8 +46,8 @@ const Dashboard = () => {
                         icon={<GroupAddIcon />}
                         title={'Administradores'}
                         color="primary"
-                        value={usersTotal}
-                        loading={loadingUsers}
+                        value={usersCount}
+                        loading={usersCountsLoading}
                     />
                 </Grid>
             </Grid>

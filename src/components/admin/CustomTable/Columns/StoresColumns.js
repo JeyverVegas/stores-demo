@@ -22,11 +22,11 @@ const StoresColumns = [
     },
     {
         Label: () => 'Telefono',
-        accessor: 'phone_number'
+        accessor: 'phoneNumber'
     },
     {
         Label: () => 'Fecha de Creación',
-        Component: ({ date }) => format(new Date(date), 'dd/MM/yyyy')
+        Component: ({ value }) => format(new Date(value?.createdAt), 'dd/MM/yyyy')
     },
     {
         Label: () => 'Acciones',

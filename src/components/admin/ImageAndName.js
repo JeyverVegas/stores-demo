@@ -1,20 +1,25 @@
 import { Avatar } from "@mui/material";
+import { useEffect, useState } from "react";
+import imgUrl from "../../helpers/imgUrl";
 
-const ImageAndName = ({ nameValue, imgValue }) => {
+const ImageAndName = ({ value }) => {
 
-    let haveImage = false;
+    const [imagePath, setImagePath] = useState('');
 
-    if (imgValue !== '/storage/') haveImage = true;
+    useEffect(() => {
+        if (value?.images?.length > 0) setImagePath(imgUrl(value?.images?.[0]?.path));
+        if (value?.imagePath) setImagePath(imgUrl(value?.imagePath));
+    }, [value]);
 
     return (
         <div style={{ textAlign: 'center', display: 'flex', alignItems: 'center' }}>
             {
-                haveImage ?
-                    <Avatar alt={nameValue} src={`${process.env.REACT_APP_API_HOST}${imgValue}`} />
+                imagePath ?
+                    <Avatar alt={value?.name} src={`${imagePath}`} />
                     :
                     null
             }
-            <span style={{ margin: '0px 5px' }}>{nameValue ? nameValue : ''}</span>
+            <span style={{ margin: '0px 5px' }}>{value?.name || ''}</span>
         </div>
     )
 }

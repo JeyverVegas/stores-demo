@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import useAxios from './useAxios';
 
-const useUsers = ({ options, axiosConfig } = {}) => {
-  const [{ data, error, loading }, getUsers] = useAxios({ url: '/users', ...axiosConfig }, options);
+const useProducts = ({ options, axiosConfig } = {}) => {
+  const [{ data, error, loading }, getProducts] = useAxios({ url: '/products', ...axiosConfig }, options);
 
-  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const [total, setTotal] = useState(0);
 
@@ -14,7 +14,7 @@ const useUsers = ({ options, axiosConfig } = {}) => {
 
   useEffect(() => {
     if (data) {
-      setUsers(data.data);
+      setProducts(data.data);
       setTotal(data?.meta?.total);
       setSize(data?.meta?.per_page);
       setNumberOfPages(data.meta?.last_page);
@@ -22,7 +22,7 @@ const useUsers = ({ options, axiosConfig } = {}) => {
 
   }, [data, loading, error]);
 
-  return [{ users, total, numberOfPages, size, error, loading }, getUsers];
+  return [{ products, total, numberOfPages, size, error, loading }, getProducts];
 };
 
-export default useUsers;
+export default useProducts;

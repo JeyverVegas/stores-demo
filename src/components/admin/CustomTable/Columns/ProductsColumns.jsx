@@ -1,13 +1,12 @@
-import ImageAndName from "../../ImageAndName";
 import TableCheck from "../TableCheck";
 import { format } from "date-fns";
+import ImageAndName from "../../ImageAndName";
 import ActionDropdown from "../../../shared/ActionDropdown";
 
-const UsersColumns = [
+const ProductsColumns = [
     {
         Label: TableCheck,
         Component: TableCheck
-
     },
     {
         Label: () => 'id',
@@ -18,8 +17,20 @@ const UsersColumns = [
         Component: ImageAndName
     },
     {
-        Label: () => 'Email',
-        accessor: 'email'
+        Label: () => 'Referencia',
+        Component: ({ value }) => `${value?.reference || '--'}`
+    },
+    {
+        Label: () => 'Precio',
+        Component: ({ value }) => `${value?.price}$`
+    },
+    {
+        Label: () => 'Categoría',
+        Component: ({ value }) => `${value?.category?.name || '--'}`
+    },
+    {
+        Label: () => 'Sub Categoría',
+        Component: ({ value }) => `${value?.subCategory?.name || '--'}`
     },
     {
         Label: () => 'Fecha de Creación',
@@ -31,5 +42,5 @@ const UsersColumns = [
     }
 ];
 
-export default UsersColumns;
+export default ProductsColumns;
 

@@ -29,6 +29,9 @@ export const createAxios = () => {
 
   axiosInstance.interceptors.request.use(
     async (request) => {
+      if (!request?.url) {
+        throw new axios.Cancel('Operation canceled by the user.');
+      }
       const authInfo = JSON.parse(`${getAuth()}`);
 
       if (authInfo?.token) {
@@ -65,6 +68,18 @@ const handleResponseError = (error) => {
       handleUnAuthorizeUser(data);
     }
 
+    if (status === 403) {
+      if (data?.message === 'Your email address is not verified.') {
+        window.location.pathname = '/email/no-verificado';
+      } else {
+        toast.error(`Error 403: No tienes permisos para este recurso.`, defaultOpts)
+      }
+    }
+
+    if (status === 404) {
+      toast.error(`Error 404: La ruta no existe en el servidor.`, defaultOpts)
+    }
+
     if (status === 500) {
       toast.error(`Ha ocurrido un error en el servidor.`, defaultOpts);
     }
@@ -86,6 +101,6 @@ const handleValidationErrors = (errorData) => {
 const handleUnAuthorizeUser = (data) => {
   if (data?.message === 'Unauthenticated.') {
     deleteAuth();
-    window.location.pathname = '/iniciar-sesion?message=El usuario no esta autenticado.';
+    window.location.pathname = '/iniciar-sesion?message=Su Sesion ha culminado&severity=error';
   }
 }

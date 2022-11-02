@@ -15,9 +15,9 @@ const useStores = ({ options, axiosConfig } = {}) => {
   useEffect(() => {
     if (data) {
       setStores(data.data);
-      setTotal(data?.total);
-      setSize(data?.per_page);
-      setNumberOfPages(data.last_page);
+      setTotal(data?.meta?.total);
+      setSize(data?.meta?.per_page);
+      setNumberOfPages(data.meta?.last_page);
     }
 
   }, [data, loading, error]);

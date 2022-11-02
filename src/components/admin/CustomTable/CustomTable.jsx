@@ -21,7 +21,8 @@ const CustomTable = ({
     selectAll,
     onSelectValue,
     changePage,
-    loading
+    loading,
+    perPage
 }) => {
 
     const handleDeleteSelected = () => {
@@ -92,6 +93,7 @@ const CustomTable = ({
                                                                 {
                                                                     Component ?
                                                                         <Component
+                                                                            value={value}
                                                                             id={value?.id}
                                                                             updatePath={updatePath}
                                                                             positionName={value?.position?.name}
@@ -134,7 +136,7 @@ const CustomTable = ({
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box p={2}>
                     <Typography>
-                        Mostrando del {`${currentPage - 1}1 al ${currentPage - 1}${values?.length}`} de {currentPage > 1 ? total : `${currentPage - 1}${total}`}
+                        <b>Total: {total}</b> - Por pagina: {perPage}
                     </Typography>
                 </Box>
                 <Box p={2} textAlign={"center"}>

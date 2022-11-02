@@ -132,6 +132,7 @@ const Admins = () => {
                 onDelete={handleDelete}
                 selectedValues={selectedValues}
                 pages={numberOfPages}
+                perPage={size}
                 total={total}
                 values={users}
                 currentPage={filters.page}

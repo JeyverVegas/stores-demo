@@ -39,7 +39,10 @@ const AdminNavBar = () => {
     const { setMenuOpen, menuOpen, pageName, setPageName } = useAdminTheme();
 
     useEffect(() => {
-        if (!pageName) {
+        var nameValue = searchParams?.get('name');
+        if (nameValue) {
+            setPageName(nameValue);
+        } else {
             if (location?.pathname.split('/').length < 4) {
                 setPageName(location?.pathname.split('/')[location?.pathname.split('/').length - 1])
                 return;
@@ -47,13 +50,6 @@ const AdminNavBar = () => {
             if (location?.pathname.split('/').length > 3) {
                 setPageName(`${location?.pathname.split('/')[2]} - ${location?.pathname.split('/')[3]}`)
             }
-        }
-    }, [location?.pathname, pageName])
-
-    useEffect(() => {
-        var nameValue = searchParams?.get('name');
-        if (nameValue) {
-            setPageName(nameValue);
         }
     }, [searchParams])
 

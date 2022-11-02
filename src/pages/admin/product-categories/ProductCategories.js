@@ -1,12 +1,16 @@
 import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import StoresColumns from "../../../components/admin/CustomTable/Columns/StoresColumns";
+import ProductCategoriesColumns from "../../../components/admin/CustomTable/Columns/ProductCategoriesColumns";
+
 import CustomTable from "../../../components/admin/CustomTable/CustomTable";
 import { useFeedBack } from "../../../context/FeedBackContext";
 import useAxios from "../../../hooks/useAxios";
-import useStores from "../../../hooks/useStores";
+import useProductCategories from "../../../hooks/useProductCategories";
 
-const Stores = () => {
+const ProductCategories = () => {
+
+    const basePath = '/admin/productos/categorias';
+    const deleteRecordBasePath = '/product-categories';
 
     const { setCustomAlert, setLoading } = useFeedBack();
 
@@ -18,12 +22,12 @@ const Stores = () => {
 
     const [selectAll, setSelectAll] = useState(false);
 
-    const [{ stores, total, numberOfPages, size, error: storesError, loading }, getStores] = useStores({ params: { ...filters } }, { useCache: false });
+    const [{ productCategories: records, total, numberOfPages, size, error: recordsErrors, loading }, getRecords] = useProductCategories({ params: { ...filters } }, { useCache: false });
 
-    const [{ error: deleteError, loading: deleteLoading }, deleteStore] = useAxios({ method: 'DELETE' }, { manual: true, useCache: false });
+    const [{ error: deleteError, loading: deleteLoading }, deleteRecord] = useAxios({ method: 'DELETE' }, { manual: true, useCache: false });
 
     useEffect(() => {
-        getStores({
+        getRecords({
             params: {
                 ...filters
             }
@@ -33,7 +37,7 @@ const Stores = () => {
     useEffect(() => {
         setLoading?.({
             show: deleteLoading,
-            message: 'Eliminando tiendas'
+            message: 'Eliminando registros'
         })
     }, [deleteLoading])
 
@@ -41,51 +45,51 @@ const Stores = () => {
         if (deleteError) {
             setCustomAlert({
                 title: 'error',
-                severity: 'danger',
+                severity: 'error',
                 message: 'Ha ocurrido un error al eliminar.',
                 show: true
             });
         }
 
-        if (storesError) {
+        if (recordsErrors) {
             setCustomAlert({
                 title: 'error',
-                severity: 'danger',
-                message: 'Ha ocurrido un error al obtener las tiendas.',
+                severity: 'error',
+                message: 'Ha ocurrido un error al obtener los registros.',
                 show: true
             });
         }
-    }, [deleteError, storesError])
+    }, [deleteError, recordsErrors])
 
     useEffect(() => {
         if (selectAll) {
-            setSelectedValues(stores?.map?.((value) => value?.id))
+            setSelectedValues(records?.map?.((value) => value?.id))
         } else {
             setSelectedValues([])
         }
     }, [selectAll])
 
     const handleDelete = (value) => {
-        deleteStore({ url: `/stores/${value?.id}` }).then((data) => {
+        deleteRecord({ url: `${deleteRecordBasePath}/${value?.id}` }).then((data) => {
             setCustomAlert({
                 title: '¡Operación Exitosa!',
                 severity: 'success',
-                message: 'La tienda ha sido eliminada exitosamente.',
+                message: 'El registro ha sido eliminado exitosamente.',
                 show: true
             });
-            getStores();
+            getRecords();
         })
     }
 
     const handleDeleteSelected = () => {
-        deleteStore({ url: `/stores/multiple`, data: { ids: selectedValues } }).then((data) => {
+        deleteRecord({ url: `${deleteRecordBasePath}/multiple`, data: { ids: selectedValues } }).then((data) => {
             setCustomAlert({
                 title: '¡Operación Exitosa!',
                 severity: 'success',
-                message: 'Las tiendas han sido eliminadas exitosamente.',
+                message: 'Los registros han sido eliminados exitosamente.',
                 show: true
             });
-            getStores();
+            getRecords();
         });
     }
 
@@ -117,26 +121,25 @@ const Stores = () => {
     return (
         <div>
             <Box textAlign={"right"} mb={4}>
-                <Button href="/admin/tiendas/crear" color="primary" variant="contained">
-                    Crear Tienda
+                <Button href={`${basePath}/crear`} color="primary" variant="contained">
+                    Crear Categoria
                 </Button>
             </Box>
-
             <CustomTable
                 onDeleteSelected={handleDeleteSelected}
                 onSelectValue={handleSelectValue}
                 onSelectAll={handleSelectALL}
                 selectAll={selectAll}
-                title={'Tiendas'}
-                updatePath={"/admin/tiendas"}
+                title={'Categorias'}
+                updatePath={`${basePath}`}
                 onDelete={handleDelete}
                 selectedValues={selectedValues}
                 pages={numberOfPages}
-                perPage={size}
                 total={total}
-                values={stores}
+                perPage={size}
+                values={records}
                 currentPage={filters.page}
-                collumns={StoresColumns}
+                collumns={ProductCategoriesColumns}
                 loading={loading}
                 changePage={handlePageChange}
             />
@@ -144,4 +147,4 @@ const Stores = () => {
     )
 }
 
-export default Stores;
+export default ProductCategories;

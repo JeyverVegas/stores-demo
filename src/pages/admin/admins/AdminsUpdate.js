@@ -31,7 +31,7 @@ const StoresUpdate = () => {
 
     useEffect(() => {
         if (getData) {
-            const { created_at, id, email_verified_at, updated_at, ...rest } = getData;
+            const { created_at, id, email_verified_at, updated_at, ...rest } = getData?.data;
             setData((oldData) => {
                 return {
                     ...oldData,

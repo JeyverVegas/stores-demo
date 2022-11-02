@@ -42,7 +42,7 @@ const ImgUploadInput = (options) => {
 
   const theme = useTheme();
 
-  const { multiple, style, accept, icon, button, className, description, change, name, previewImage, deleteButton } = options;
+  const { multiple, style, accept, icon, button, className, description, change, name, previewImage, deleteButton, onDelete } = options;
 
   const [files, setFiles] = useState([]);
 
@@ -64,7 +64,7 @@ const ImgUploadInput = (options) => {
   const handleDelete = (e) => {
     setFiles([]);
     setPreview(null);
-    change?.({ target: { name: name, files: null, type: "file" } });
+    onDelete?.();
   }
 
   const { getInputProps, getRootProps } = useDropzone({

@@ -2,7 +2,7 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ActionDropdown = ({ id, updatePath, onDelete, withOutUpdate, nameValue }) => {
+const ActionDropdown = ({ value, id, updatePath, onDelete, withOutUpdate, nameValue }) => {
 
     let navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const ActionDropdown = ({ id, updatePath, onDelete, withOutUpdate, nameValue }) 
     }
 
     const handleUpdate = () => {
-        navigate(`${updatePath}/${id}?name=${nameValue}`);
+        navigate(`${updatePath}/${value?.id}?name=${value?.name || ''}`);
     }
 
     return (
